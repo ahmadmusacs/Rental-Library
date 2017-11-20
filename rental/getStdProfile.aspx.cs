@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Configuration;
+public partial class getStdProfile : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        string name = HttpContext.Current.Request.Url.AbsoluteUri.Split('=').Last();
+        name = "c1207021";
+        string mycon = "";
+        mycon = ConfigurationManager.ConnectionStrings["mycon"].ToString();
+        SqlConnection objsqlconn = new SqlConnection(mycon);
+        objsqlconn.Open();
+        SqlCommand objcmd = new SqlCommand("Select * from datatable where username='" + name + "'", objsqlconn);
+        using (SqlDataAdapter sda = new SqlDataAdapter(objcmd))
+        {
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            lvCustomers.DataSource = dt;
+            lvCustomers.DataBind();
+        }
+    }
+}
